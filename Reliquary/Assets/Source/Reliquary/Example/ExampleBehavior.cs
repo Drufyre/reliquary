@@ -8,13 +8,10 @@ public class ExampleBehavior : ReliquaryBehavior{
 	
 	// Update is called once per frame
 	void Update () {
-        if (exampleComponent == null) {
-            exampleComponent = new ExampleComponent();
-        }
-        exampleComponent = dataBucket.GetRegisteredComponent(exampleComponent) as ExampleComponent;
+        exampleComponent = GetBucketComponent<ExampleComponent>();
         ProcessValues();
         PrintValues();
-        dataBucket.SetComponent(exampleComponent);
+        SetBucketComponent(exampleComponent);
 	}
 
     private void ProcessValues() {

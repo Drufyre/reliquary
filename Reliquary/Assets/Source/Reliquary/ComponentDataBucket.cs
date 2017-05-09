@@ -8,6 +8,10 @@ namespace Reliquary {
 
         #region Protected Fields
         protected Dictionary<string, System.Object> components;
+
+        private void Start() {
+            init();
+        }
         #endregion
 
         #region Public Functions
@@ -25,22 +29,10 @@ namespace Reliquary {
             }
         }
 
-        //Unregister a component by type.
-        public bool UnregisterComponent(String componentType) {
-            init();
-            if (components.ContainsKey(componentType)) {
+        public bool UnregisterComponent<T>() {
+            string componentType = typeof(T).Name;
+            if(components.ContainsKey(componentType)) {
                 return components.Remove(componentType);
-            } else {
-                return false;
-            }
-        }
-
-        //Unregister a component by the object itself.
-        // Same as the above.  The value isn't actually considered, only its type.
-        public bool UnregisterComponent(System.Object componentObject) {
-            init();
-            if (components.ContainsKey(componentObject.GetType().Name)) {
-                return components.Remove(componentObject.GetType().Name);
             } else {
                 return false;
             }
@@ -62,24 +54,20 @@ namespace Reliquary {
             }
         }
 
-        public System.Object GetRegisteredComponent(System.Object componentObject) {
-
-            return GetRegisteredComponent(componentObject.GetType());
-        }
-
         //Get the component in the databucket defined by componentType.
         // In order to have smooth running, if the type doesn't exist in the DataBucket
         // Then a new component will be registered with its default values, then returned.
-        public System.Object GetRegisteredComponent(Type componentType) {
 
+        public T GetRegisteredComponent<T>() {
             init();
-            string objectType = componentType.Name;
-            if (!components.ContainsKey(objectType)) {
-                System.Object componentObject = Activator.CreateInstance(componentType);
+            string objectName = typeof(T).Name;
+            if(!components.ContainsKey(objectName)) {
+                System.Object componentObject = Activator.CreateInstance(typeof(T));
+                // Register Component
                 RegisterComponent(componentObject);
             }
 
-            return components[objectType];
+            return (T)components[objectName];
         }
         #endregion
 

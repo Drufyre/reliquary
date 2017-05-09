@@ -12,5 +12,13 @@ namespace Reliquary {
         public virtual void Start() {
             dataBucket = GetComponent<ComponentDataBucket>();
         }
+
+        public T GetBucketComponent<T>() {
+            return dataBucket.GetRegisteredComponent<T>();
+        }
+
+        public void SetBucketComponent(System.Object bucketComponent) {
+            dataBucket.SetComponent(bucketComponent);
+        }
     }
 }
